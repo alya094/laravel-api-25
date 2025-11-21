@@ -35,7 +35,8 @@ class CategoriProductController extends Controller
             return response()->json([
                 'message'=>'Tidak ada data',
                 'data'=>null
-            ],401);
+            ],401); 
+            // okee
         }
     }
 
