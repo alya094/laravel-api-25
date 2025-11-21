@@ -36,7 +36,6 @@ class CategoriProductController extends Controller
                 'message'=>'Tidak ada data',
                 'data'=>null
             ],401); 
-            // okee
         }
     }
 
