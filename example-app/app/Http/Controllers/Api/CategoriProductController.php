@@ -11,26 +11,48 @@ class CategoriProductController extends Controller
 {
     //
     public function index(){
-        $category_product=CategoriProduct::all();
-        return response()->json($category_product);
+        try{
+            $category_product=CategoriProduct::all();
+            return response()->json($category_product);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'=>'Error',
+                'message'=>$e->getMessage(),
+            ],500);
+        }
     }
 
     public function store(Request $request){
-        $validateData=$request->validate([
-            'name'=>'required|max:255',
-            'description'=>'required|string',
-        ]);
 
-        $category_product=CategoriProduct::create($validateData);
-        return response()->json([
-            'status'=>'Succes',
-            'data'=>$category_product,
-            'message'=>'Berhasil disimpan',
-        ],201);
+        try{    
+            $validateData=$request->validate([
+                'name'=>'required|max:255',
+                'description'=>'required|string',
+            ]);
+    
+            $category_product=CategoriProduct::create($validateData);
+            return response()->json([
+                'status'=>'Succes',
+                'data'=>$category_product,
+                'message'=>'Berhasil disimpan',
+            ],201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'=>'Error',
+                'message'=>$e->getMessage(),
+            ],500);
+        }
     }
 
     public function show($id){
-        $category=CategoriProduct::find($id);
+        $category=CategoriProduct::findorfail($id);
+        return response()->json([
+            'status'=>'Succes',
+            'data'=>$category,
+            'message'=>'Berhasil diambil',
+        ],200);
         if(!$category){
             return response()->json([
                 'message'=>'Tidak ada data',
