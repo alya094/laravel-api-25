@@ -36,23 +36,26 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-             $validateData=$request->validate([
-            'name'=>'required|max:255',
-            'product_category_id'=>'required|exists:categori_products,id',
-            'description'=>'required|string',
-        ]);
+            $validateData=$request->validate([
+                'name'=>'required|max:255',
+                'product_category_id'=>'required|exists:categori_products,id',
+                'description'=>'required|string',
+                'code'=>'required|string',
+            ]);
+            
+            $product=Product::create($validateData);
+            return response()->json([
+                'status'=>'Succes',
+                'data'=>$product,
+                'message'=>'Berhasil disimpan',
+            ],201);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'status'=>'Error',
                 'message'=>$e->getMessage(),
             ],500);
         }
-        $product=Product::create($validateData);
-        return response()->json([
-            'status'=>'Succes',
-            'data'=>$product,
-            'message'=>'Berhasil disimpan',
-        ],201);
     }
 
     /**
@@ -87,10 +90,14 @@ class ProductController extends Controller
         $validate=$request->validate([
             'name'=>'required|max:255',
             'code'=>'required',
+            'product_category_id'=>'required|exists:categori_products,id',
+            'description'=>'required|string',
         ]);
         $product->update([
             'name'=>$validate['name'],
             'code'=>$validate['code'],
+            'product_category_id'=>$validate['product_category_id'],
+            'description'=>$validate['description'],
         ]);
         return response()->json([
             'status'=>'Succes',
@@ -104,13 +111,25 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-        $product=Product::find($id);
-        $product->delete();
-        return response()->json([
-            'status'=>'Succes',
-            'data'=>$product,
-            'message'=>'Berhasil dihapus',
-        ],200);
+        try {
+            $product=Product::find($id);
+            if (!$product) {
+                return response()->json([
+                    'status'=>'Error',
+                    'message'=>'Product not found',
+                ], 404);
+            }
+            $product->delete();
+            return response()->json([
+                'status'=>'Succes',
+                'data'=>$product,
+                'message'=>'Berhasil dihapus',
+            ],200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'=>'Error',
+                'message'=>$e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriProductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\BookController;
-// use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::prefix('v1/auth')->group(function () {
+    Route::post('/signup', [AuthController::class, 'signup']);
+    Route::post('/signin', [AuthController::class, 'signin']);
+    Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+});
+
 Route::prefix('v1')->group(function () {
-    Route::resource('/categori-product',CategoriProductController::class);
+    Route::resource('/product-categories',CategoriProductController::class);
     Route::resource('/product-variant',ProductVariantController::class);
 
 

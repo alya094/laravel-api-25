@@ -12,9 +12,11 @@ class CategoriProductController extends Controller
     //
     public function index(){
         try{
-            $category_product=CategoriProduct::all();
-            return response()->json($category_product);
-            
+            $product_categories = CategoriProduct::get();
+            return response()->json([
+            'data'=>$product_categories,
+        ],200);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status'=>'Error',

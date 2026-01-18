@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductVariant extends Model
 {
     //
-    protected $fillable = ['name', 'product_id','description'];
+    protected $fillable = ['name', 'product_id','description', 'price', 'stock', 'product_category_id'];
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

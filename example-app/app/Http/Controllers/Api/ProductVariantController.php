@@ -40,14 +40,19 @@ class ProductVariantController extends Controller
             $validateData=$request->validate([
                 'name'=>'required|max:255',
                 'product_id'=>'required|exists:products,id',
-                'description'=>'required|string',
+                'product_category_id'=>'nullable|exists:categori_products,id',
+                'price'=>'required|numeric',
+                'stock'=>'required|numeric',
+                'description'=>'nullable|string',
             ]);
+            
             $product_variant=ProductVariant::create($validateData);
             return response()->json([
                 'status'=>'Succes',
                 'data'=>$product_variant,
                 'message'=>'Berhasil disimpan',
             ],201);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'status'=>'Error',
@@ -89,7 +94,10 @@ class ProductVariantController extends Controller
         $validate=$request->validate([
             'name'=>'required|max:255',
             'product_id'=>'required|exists:products,id',
-            'description'=>'required|string',
+            'product_category_id'=>'nullable|exists:categori_products,id',
+            'price'=>'required|numeric',
+            'stock'=>'required|numeric',
+            'description'=>'nullable|string',
         ]);
         $product_variant->update($validate);
         return response()->json([
@@ -110,11 +118,6 @@ class ProductVariantController extends Controller
         return response()->json([
             'status'=>'Succes',
             'data'=>$product_variant,
-            'message'=>'Berhasil dihapus',
         ],200); 
-
-    $product_variant->delete();
-    return response()->json(['message'=>'Berhasil dihapus'],200);
-
     }
 }
